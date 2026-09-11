@@ -26,20 +26,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Page<ProductResponse> getAll(String keyword, BigDecimal minPrice, BigDecimal maxPrice, String category, Pageable pageable) {
-//        Page<Product> productResponses = productRepository.findByNameAndStatus(keyword, "TRUE", pageable);
-//        Page<Product> productResponses = productRepository.findAll(ProductSpecification
-//                        .filterProducts(keyword, BigDecimal.valueOf(2000000), BigDecimal.valueOf(100000000), "smart", "TRUE"), pageable);
-
         GenericSpecificationBuilder<Product> builder = new GenericSpecificationBuilder<>();
-        if (StringUtils.hasText(keyword = keyword != null ? keyword.trim() : "" )) {
-            builder.with("name", SearchOperation.LIKE_IGNORE_CASE, keyword)
-                    .withOr("description", SearchOperation.LIKE_IGNORE_CASE, keyword);
+        if (StringUtils.hasText(keyword)) {
+            builder.with("name", SearchOperation.LIKE_IGNORE_CASE, keyword.trim())
+                    .withOr("description", SearchOperation.LIKE_IGNORE_CASE, keyword.trim());
         }
 
         builder.with("status", SearchOperation.EQUAL, "TRUE");
 
         if (StringUtils.hasText(category)) {
-            builder.with("category", SearchOperation.LIKE_IGNORE_CASE, category);
+            builder.with("category", SearchOperation.LIKE_IGNORE_CASE, category.trim());
         }
         if (minPrice != null) {
             builder.with("price", SearchOperation.GREATER_THAN_EQUAL, minPrice);

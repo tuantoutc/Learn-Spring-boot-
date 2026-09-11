@@ -36,18 +36,18 @@ public class GenericSpecificationBuilder<T> {
             return null;
         }
         // Viên gạch đầu tiên luôn là điểm bắt đầu
-        Specification<T> result = new GenericSpecification<T>(params.get(0));
+        Specification<T> result = new GenericSpecification<>(params.getFirst());
 
         for (int i = 1; i < params.size(); i++) {
             SearchCriteria criteria = params.get(i);
 
             // KIỂM TRA: Nếu là gạch OR thì dùng Specification.where().or(...)
             if (criteria.isOrPredicate()) {
-                result = Specification.where(result).or(new GenericSpecification<T>(criteria));
+                result = Specification.where(result).or(new GenericSpecification<>(criteria));
             }
             // Ngược lại thì dùng Specification.where().and(...)
             else {
-                result = Specification.where(result).and(new GenericSpecification<T>(criteria));
+                result = Specification.where(result).and(new GenericSpecification<>(criteria));
             }
         }
         return result;
