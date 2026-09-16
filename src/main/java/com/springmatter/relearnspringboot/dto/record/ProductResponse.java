@@ -9,6 +9,5 @@ public record ProductResponse(
         String category,
         String status,
         String description
-
 ) {
 }

@@ -47,6 +47,6 @@ public class ProductServiceImpl implements ProductService {
         Specification<Product> specification = builder.build();
         Page<Product> products = productRepository.findAll(specification, pageable);
 
-        return products.map(productMapper::mapToProductRepository);
+        return products.map(productMapper::mapToProductResponse);
     }
 }
