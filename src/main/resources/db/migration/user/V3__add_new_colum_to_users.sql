@@ -1,0 +1,1 @@
+ALTER TABLE users ADD COLUMN street VARCHAR(255);

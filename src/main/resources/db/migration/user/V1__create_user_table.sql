@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS users(
+    id BIGSERIAL PRIMARY KEY,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    name VARCHAR(100),
+    username VARCHAR(100),
+    password VARCHAR(100),
+    phone VARCHAR(10) UNIQUE,
+    address VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
