@@ -1,4 +1,4 @@
-package com.springmatter.relearnspringboot.entity;
+package com.springmatter.relearnspringboot.entity.user;
 
 
 import jakarta.persistence.*;

@@ -15,6 +15,4 @@ public interface UserService {
     UserResponse getUserById(Long id);
 
     List<UserResponse> getAll();
-
-
 }

@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    user:
+      jdbc-url: ${STG_DB_URL}
+      username: ${STG_DB_USERNAME}
+      password: ${STG_DB_PASSWORD}
+    product:
+      jdbc-url: ${STG_DB_URL}
+      username: ${STG_DB_USERNAME}
+      password: ${STG_DB_PASSWORD}
+server:
+  port: ${STG_DB_PORT:8081}

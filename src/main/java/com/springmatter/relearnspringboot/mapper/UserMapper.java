@@ -1,11 +1,14 @@
 package com.springmatter.relearnspringboot.mapper;
 
+import com.springmatter.relearnspringboot.dto.record.UserProfileResponse;
 import com.springmatter.relearnspringboot.dto.record.UserRequest;
 import com.springmatter.relearnspringboot.dto.record.UserResponse;
-import com.springmatter.relearnspringboot.entity.User;
+import com.springmatter.relearnspringboot.entity.user.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
@@ -19,4 +22,8 @@ public interface UserMapper {
     @Mapping(target = "password", ignore = true)
     @Mapping(target = "id", ignore = true)
     User mapUpdateUserEntity(UserRequest request, @MappingTarget User user);
+
+
+    @Mapping(source = "userName", target = "username")
+    UserProfileResponse mapToUserProfileResponse(String userName, List<String> roles);
 }

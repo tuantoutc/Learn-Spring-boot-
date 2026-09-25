@@ -1,6 +1,6 @@
 package com.springmatter.relearnspringboot.repository.specification;
 
-import com.springmatter.relearnspringboot.entity.Product;
+import com.springmatter.relearnspringboot.entity.product.Product;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;

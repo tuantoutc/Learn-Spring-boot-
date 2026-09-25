@@ -2,20 +2,26 @@ package com.springmatter.relearnspringboot.controller.rest;
 
 import com.springmatter.relearnspringboot.common.ApiResponse;
 import com.springmatter.relearnspringboot.common.BaseController;
+import com.springmatter.relearnspringboot.dto.record.UserProfileResponse;
 import com.springmatter.relearnspringboot.dto.record.UserRequest;
 import com.springmatter.relearnspringboot.dto.record.UserResponse;
+import com.springmatter.relearnspringboot.mapper.UserMapper;
 import com.springmatter.relearnspringboot.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(value= "/api/v1/users")
+@RequestMapping(value = "/api/v1/users")
 @RequiredArgsConstructor
 public class UserController extends BaseController {
     private final UserService userService;
+    private final UserMapper userMapper;
 
     @GetMapping
     public ApiResponse<List<UserResponse>> getListUser() {
@@ -30,7 +36,7 @@ public class UserController extends BaseController {
 
     @PutMapping("/{id}")
     public ApiResponse<String> updateUser(@PathVariable Long id,
-                                             @RequestBody @Valid UserRequest request) {
+                                          @RequestBody @Valid UserRequest request) {
         userService.update(id, request);
         return createSuccessResponse("User updated");
     }
@@ -44,5 +50,15 @@ public class UserController extends BaseController {
     @GetMapping("/{id}")
     public ApiResponse<UserResponse> getUserById(@PathVariable Long id) {
         return createSuccessResponse(userService.getUserById(id));
+    }
+
+    @GetMapping("/me")
+    public ApiResponse<UserProfileResponse> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+
+        return ApiResponse.success(userMapper.mapToUserProfileResponse(userDetails.getUsername(), roles));
+
     }
 }

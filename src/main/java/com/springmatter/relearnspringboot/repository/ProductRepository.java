@@ -1,6 +1,6 @@
 package com.springmatter.relearnspringboot.repository;
 
-import com.springmatter.relearnspringboot.entity.Product;
+import com.springmatter.relearnspringboot.entity.product.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

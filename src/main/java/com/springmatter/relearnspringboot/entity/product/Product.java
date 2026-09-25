@@ -1,4 +1,4 @@
-package com.springmatter.relearnspringboot.entity;
+package com.springmatter.relearnspringboot.entity.product;
 
 import jakarta.persistence.*;
 import lombok.*;

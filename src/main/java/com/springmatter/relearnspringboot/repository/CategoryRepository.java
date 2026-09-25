@@ -1,7 +1,7 @@
 package com.springmatter.relearnspringboot.repository;
 
 
-import com.springmatter.relearnspringboot.entity.Category;
+import com.springmatter.relearnspringboot.entity.product.Category;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

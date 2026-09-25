@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: study
+  profiles:
+    active: dev
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        default_batch_fetch_size: 100
+    show-sql: true
+  flyway:
+    enabled: false
+  main:
+    allow-circular-references: true
+jwt:
+  secret: "9e9869aac568543a7e7a27795415aa99d5752b49c5dbd23ab949f473d8c34e8b"
+  expiration: 3600000
+
