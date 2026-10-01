@@ -5,7 +5,7 @@ import com.springmatter.relearnspringboot.dto.record.UserRequest;
 import com.springmatter.relearnspringboot.dto.record.UserResponse;
 import com.springmatter.relearnspringboot.entity.user.User;
 import com.springmatter.relearnspringboot.mapper.UserMapper;
-import com.springmatter.relearnspringboot.repository.UserRepository;
+import com.springmatter.relearnspringboot.repository.UsersRepository;
 import com.springmatter.relearnspringboot.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,31 +18,31 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional
 public class UserServiceImpl implements UserService {
-    private final UserRepository userRepository;
+    private final UsersRepository usersRepository;
     private final UserMapper userMapper;
     @Override
     public void create(UserRequest request) {
-        userRepository.save(userMapper.mapToUserEntity(request));
+        usersRepository.save(userMapper.mapToUserEntity(request));
     }
 
     @Override
     public void update(Long id, UserRequest request) {
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
-        userRepository.save(userMapper.mapUpdateUserEntity(request, user));
+        User user = usersRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        usersRepository.save(userMapper.mapUpdateUserEntity(request, user));
     }
 
     @Override
     public void delete(Long id) {
-        Optional<User> user = userRepository.findById(id);
+        Optional<User> user = usersRepository.findById(id);
         if(user.isEmpty()) {
             throw new IllegalArgumentException("User not found");
         }
-        userRepository.deleteById(id);
+        usersRepository.deleteById(id);
     }
 
     @Override
     public UserResponse getUserById(Long id) {
-        Optional<User> user = userRepository.findById(id);
+        Optional<User> user = usersRepository.findById(id);
         if(user.isEmpty()) {
             throw new IllegalArgumentException("User not found");
         }
@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserResponse> getAll() {
-        List<User> users = userRepository.findAll();
+        List<User> users = usersRepository.findAll();
         return users.stream().map(userMapper::mapToUserResponse).toList();
     }
 

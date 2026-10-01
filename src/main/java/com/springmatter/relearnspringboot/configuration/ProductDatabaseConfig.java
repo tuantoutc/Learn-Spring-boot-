@@ -3,6 +3,7 @@ package com.springmatter.relearnspringboot.configuration;
 
 import com.springmatter.relearnspringboot.repository.CategoryRepository;
 import com.springmatter.relearnspringboot.repository.ProductRepository;
+import com.springmatter.relearnspringboot.repository.UsersRepository;
 import jakarta.persistence.EntityManagerFactory;
 import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -30,7 +31,7 @@ import javax.sql.DataSource;
         ),
         excludeFilters = @ComponentScan.Filter(
                 type = org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE,
-                classes = {com.springmatter.relearnspringboot.repository.UserRepository.class, com.springmatter.relearnspringboot.repository.PatientRepository.class}
+                classes = {UsersRepository.class, com.springmatter.relearnspringboot.repository.PatientRepository.class}
         ),
         entityManagerFactoryRef = "productEntityManagerFactory",
         transactionManagerRef = "productTransactionManager"

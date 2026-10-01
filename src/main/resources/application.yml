@@ -18,5 +18,6 @@ spring:
     allow-circular-references: true
 jwt:
   secret: "9e9869aac568543a7e7a27795415aa99d5752b49c5dbd23ab949f473d8c34e8b"
-  expiration: 3600000
+  expiration: 60000  #1h
+  refresh-expiration: 604800000  # 7 ngay
 
