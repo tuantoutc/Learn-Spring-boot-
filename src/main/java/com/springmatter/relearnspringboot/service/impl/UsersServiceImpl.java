@@ -1,8 +1,8 @@
 package com.springmatter.relearnspringboot.service.impl;
 
-import com.springmatter.relearnspringboot.dto.record.AccessTokenResponse;
-import com.springmatter.relearnspringboot.dto.record.LoginRequest;
-import com.springmatter.relearnspringboot.dto.record.RegisterRequest;
+import com.springmatter.relearnspringboot.dto.record.response.AccessTokenResponse;
+import com.springmatter.relearnspringboot.dto.record.request.LoginRequest;
+import com.springmatter.relearnspringboot.dto.record.request.RegisterRequest;
 import com.springmatter.relearnspringboot.entity.auth.RefreshToken;
 import com.springmatter.relearnspringboot.entity.auth.Users;
 import com.springmatter.relearnspringboot.repository.auth.UserRepository;

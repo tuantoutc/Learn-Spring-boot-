@@ -1,9 +1,9 @@
 package com.springmatter.relearnspringboot.mapper;
 
 
-import com.springmatter.relearnspringboot.dto.record.CategoryRequest;
-import com.springmatter.relearnspringboot.dto.record.CategoryResponse;
-import com.springmatter.relearnspringboot.dto.record.ProductResponse;
+import com.springmatter.relearnspringboot.dto.record.request.CategoryRequest;
+import com.springmatter.relearnspringboot.dto.record.response.CategoryResponse;
+import com.springmatter.relearnspringboot.dto.record.response.ProductResponse;
 import com.springmatter.relearnspringboot.entity.product.Category;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

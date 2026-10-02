@@ -2,7 +2,7 @@ package com.springmatter.relearnspringboot.controller.rest;
 
 import com.springmatter.relearnspringboot.common.ApiResponse;
 import com.springmatter.relearnspringboot.common.BaseController;
-import com.springmatter.relearnspringboot.dto.record.ProductResponse;
+import com.springmatter.relearnspringboot.dto.record.response.ProductResponse;
 import com.springmatter.relearnspringboot.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

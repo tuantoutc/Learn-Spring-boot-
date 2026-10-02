@@ -1,7 +1,7 @@
 package com.springmatter.relearnspringboot.service;
 
-import com.springmatter.relearnspringboot.dto.record.UserRequest;
-import com.springmatter.relearnspringboot.dto.record.UserResponse;
+import com.springmatter.relearnspringboot.dto.record.request.UserRequest;
+import com.springmatter.relearnspringboot.dto.record.response.UserResponse;
 
 import java.util.List;
 

@@ -1,9 +1,9 @@
 package com.springmatter.relearnspringboot.service.impl;
 
-import com.springmatter.relearnspringboot.dto.record.CategoryRequest;
-import com.springmatter.relearnspringboot.dto.record.CategoryResponse;
-import com.springmatter.relearnspringboot.dto.record.ProductRequest;
-import com.springmatter.relearnspringboot.dto.record.ProductResponse;
+import com.springmatter.relearnspringboot.dto.record.request.CategoryRequest;
+import com.springmatter.relearnspringboot.dto.record.response.CategoryResponse;
+import com.springmatter.relearnspringboot.dto.record.request.ProductRequest;
+import com.springmatter.relearnspringboot.dto.record.response.ProductResponse;
 import com.springmatter.relearnspringboot.entity.product.Category;
 import com.springmatter.relearnspringboot.entity.product.Product;
 import com.springmatter.relearnspringboot.mapper.CategoryMapper;

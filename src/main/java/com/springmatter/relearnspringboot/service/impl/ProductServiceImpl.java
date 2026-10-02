@@ -1,6 +1,6 @@
 package com.springmatter.relearnspringboot.service.impl;
 
-import com.springmatter.relearnspringboot.dto.record.ProductResponse;
+import com.springmatter.relearnspringboot.dto.record.response.ProductResponse;
 import com.springmatter.relearnspringboot.entity.product.Product;
 import com.springmatter.relearnspringboot.enums.SearchOperation;
 import com.springmatter.relearnspringboot.mapper.ProductMapper;

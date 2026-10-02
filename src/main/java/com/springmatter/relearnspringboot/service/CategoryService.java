@@ -1,7 +1,7 @@
 package com.springmatter.relearnspringboot.service;
 
-import com.springmatter.relearnspringboot.dto.record.CategoryRequest;
-import com.springmatter.relearnspringboot.dto.record.CategoryResponse;
+import com.springmatter.relearnspringboot.dto.record.request.CategoryRequest;
+import com.springmatter.relearnspringboot.dto.record.response.CategoryResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

@@ -1,4 +1,4 @@
-package com.springmatter.relearnspringboot.dto.record;
+package com.springmatter.relearnspringboot.dto.record.response;
 
 import org.springframework.http.ResponseCookie;
 

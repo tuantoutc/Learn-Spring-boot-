@@ -2,9 +2,9 @@ package com.springmatter.relearnspringboot.controller.rest;
 
 import com.springmatter.relearnspringboot.common.ApiResponse;
 import com.springmatter.relearnspringboot.common.BaseController;
-import com.springmatter.relearnspringboot.dto.record.UserProfileResponse;
-import com.springmatter.relearnspringboot.dto.record.UserRequest;
-import com.springmatter.relearnspringboot.dto.record.UserResponse;
+import com.springmatter.relearnspringboot.dto.record.response.UserProfileResponse;
+import com.springmatter.relearnspringboot.dto.record.request.UserRequest;
+import com.springmatter.relearnspringboot.dto.record.response.UserResponse;
 import com.springmatter.relearnspringboot.mapper.UserMapper;
 import com.springmatter.relearnspringboot.service.UserService;
 import jakarta.validation.Valid;

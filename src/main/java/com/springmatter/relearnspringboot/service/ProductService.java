@@ -1,6 +1,6 @@
 package com.springmatter.relearnspringboot.service;
 
-import com.springmatter.relearnspringboot.dto.record.ProductResponse;
+import com.springmatter.relearnspringboot.dto.record.response.ProductResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

@@ -2,7 +2,7 @@ package com.springmatter.relearnspringboot.controller.rest;
 
 
 import com.springmatter.relearnspringboot.common.ApiResponse;
-import com.springmatter.relearnspringboot.dto.record.PatientResponse;
+import com.springmatter.relearnspringboot.dto.record.response.PatientResponse;
 import com.springmatter.relearnspringboot.service.PatientService;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;

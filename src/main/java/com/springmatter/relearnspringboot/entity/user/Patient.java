@@ -1,6 +1,7 @@
 package com.springmatter.relearnspringboot.entity.user;
 
 
+import com.springmatter.relearnspringboot.dto.record.request.Checkup;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

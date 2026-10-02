@@ -3,7 +3,10 @@ package com.springmatter.relearnspringboot.controller.rest;
 
 import com.springmatter.relearnspringboot.common.ApiResponse;
 import com.springmatter.relearnspringboot.common.BaseController;
-import com.springmatter.relearnspringboot.dto.record.*;
+import com.springmatter.relearnspringboot.dto.record.request.LoginRequest;
+import com.springmatter.relearnspringboot.dto.record.request.RegisterRequest;
+import com.springmatter.relearnspringboot.dto.record.response.AccessTokenResponse;
+import com.springmatter.relearnspringboot.dto.record.response.TokenResponse;
 import com.springmatter.relearnspringboot.service.UsersService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;

@@ -1,6 +1,8 @@
 package com.springmatter.relearnspringboot.service;
 
-import com.springmatter.relearnspringboot.dto.record.*;
+import com.springmatter.relearnspringboot.dto.record.request.LoginRequest;
+import com.springmatter.relearnspringboot.dto.record.request.RegisterRequest;
+import com.springmatter.relearnspringboot.dto.record.response.AccessTokenResponse;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 

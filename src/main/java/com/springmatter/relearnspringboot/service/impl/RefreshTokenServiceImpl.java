@@ -39,17 +39,6 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     }
 
     @Transactional
-    @Override
-    public void verifyRefreshToken(RefreshToken refreshToken) {
-        if (refreshToken.getExpiryDate().compareTo(Instant.now()) < 0) {
-            refreshToken.setRevoked(true);
-            refreshTokenRepository.save(refreshToken);
-            throw new IllegalArgumentException("Refresh token expired");
-        }
-    }
-
-
-    @Transactional
     public RefreshToken rotateRefreshToken(String refreshTokenStr) {
         RefreshToken refreshToken = refreshTokenRepository.findByToken(refreshTokenStr)
                 .orElseThrow(() -> new SecurityException("Refresh Token không tồn tại."));
@@ -62,7 +51,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         }
 
         // 2. KIỂM TRA HẠN SỬ DỤNG
-        if (refreshToken.getExpiryDate().compareTo(Instant.now())< 0) {
+        if (refreshToken.getExpiryDate().compareTo(Instant.now()) < 0) {
             refreshToken.setRevoked(true);
             refreshTokenRepository.save(refreshToken);
             throw new SecurityException("Refresh Token đã hết hạn, vui lòng đăng nhập lại.");
@@ -76,6 +65,12 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         return saveNewToken(refreshToken.getUserId(), refreshToken.getFamilyId());
     }
 
+    @Transactional
+    @Override
+    public void revokeAllUserToken(Long userId) {
+        refreshTokenRepository.revokeAllByUserId(userId);
+    }
+
     private RefreshToken saveNewToken(Long userId, String familyId) {
         RefreshToken newToken = RefreshToken.builder()
                 .userId(userId)
@@ -87,13 +82,5 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
                 .build();
         return refreshTokenRepository.save(newToken);
     }
-
-
-    @Transactional
-    @Override
-    public void revokeAllUserToken(Long userId) {
-        refreshTokenRepository.revokeAllByUserId(userId);
-    }
-
 
 }

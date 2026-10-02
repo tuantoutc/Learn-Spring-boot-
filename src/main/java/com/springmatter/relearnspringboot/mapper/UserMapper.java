@@ -1,8 +1,8 @@
 package com.springmatter.relearnspringboot.mapper;
 
-import com.springmatter.relearnspringboot.dto.record.UserProfileResponse;
-import com.springmatter.relearnspringboot.dto.record.UserRequest;
-import com.springmatter.relearnspringboot.dto.record.UserResponse;
+import com.springmatter.relearnspringboot.dto.record.response.UserProfileResponse;
+import com.springmatter.relearnspringboot.dto.record.request.UserRequest;
+import com.springmatter.relearnspringboot.dto.record.response.UserResponse;
 import com.springmatter.relearnspringboot.entity.user.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

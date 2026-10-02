@@ -2,8 +2,8 @@ package com.springmatter.relearnspringboot.controller.rest;
 
 import com.springmatter.relearnspringboot.common.ApiResponse;
 import com.springmatter.relearnspringboot.common.BaseController;
-import com.springmatter.relearnspringboot.dto.record.CategoryRequest;
-import com.springmatter.relearnspringboot.dto.record.CategoryResponse;
+import com.springmatter.relearnspringboot.dto.record.request.CategoryRequest;
+import com.springmatter.relearnspringboot.dto.record.response.CategoryResponse;
 import com.springmatter.relearnspringboot.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;

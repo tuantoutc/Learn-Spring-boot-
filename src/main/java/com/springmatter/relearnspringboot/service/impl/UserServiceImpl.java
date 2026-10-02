@@ -1,8 +1,8 @@
 package com.springmatter.relearnspringboot.service.impl;
 
 
-import com.springmatter.relearnspringboot.dto.record.UserRequest;
-import com.springmatter.relearnspringboot.dto.record.UserResponse;
+import com.springmatter.relearnspringboot.dto.record.request.UserRequest;
+import com.springmatter.relearnspringboot.dto.record.response.UserResponse;
 import com.springmatter.relearnspringboot.entity.user.User;
 import com.springmatter.relearnspringboot.mapper.UserMapper;
 import com.springmatter.relearnspringboot.repository.UsersRepository;
