@@ -1,7 +1,11 @@
 package com.springmatter.relearnspringboot.dto.record;
 
-public record AccessTokenResponse(
+import org.springframework.http.ResponseCookie;
 
-        String accessToken
+public record AccessTokenResponse(
+        String accessToken,
+        ResponseCookie responseCookie,
+        String refreshToken
+
 ) {
 }

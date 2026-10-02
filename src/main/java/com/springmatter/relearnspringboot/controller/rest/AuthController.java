@@ -5,50 +5,60 @@ import com.springmatter.relearnspringboot.common.ApiResponse;
 import com.springmatter.relearnspringboot.common.BaseController;
 import com.springmatter.relearnspringboot.dto.record.AccessTokenResponse;
 import com.springmatter.relearnspringboot.dto.record.LoginRequest;
-import com.springmatter.relearnspringboot.dto.record.RefreshTokenRequest;
 import com.springmatter.relearnspringboot.dto.record.RegisterRequest;
+import com.springmatter.relearnspringboot.dto.record.TokenResponse;
 import com.springmatter.relearnspringboot.service.UsersService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
+@Validated
 public class AuthController extends BaseController {
 
     private final UsersService usersService;
 
 
-    // xu dung
+    // Đọc từ @CookieValue với HttpOnly Cookie (Bảo mật cao nhất cho Web Client / React / Vue / Next.js)
 
     @PostMapping("/login")
-    public ApiResponse<ResponseEntity> login(@RequestBody @Valid LoginRequest request) {
-        return ApiResponse.success(ResponseEntity.ok(usersService.login(request)));
-
+    public ApiResponse<TokenResponse> login(@RequestBody @Valid LoginRequest request,
+                                            HttpServletResponse response) {
+        AccessTokenResponse accessTokenResponse = usersService.login(request);
+        response.addHeader(HttpHeaders.SET_COOKIE, accessTokenResponse.refreshToken());
+        return ApiResponse.success(new TokenResponse(accessTokenResponse.accessToken()));
     }
 
     @PostMapping("/register")
-    public ApiResponse<ResponseEntity> registerAccount(@RequestBody @Valid RegisterRequest request) {
-        return ApiResponse.success(ResponseEntity.ok(usersService.register(request)));
+    public ApiResponse<Map<String,String>> registerAccount(@RequestBody @Valid RegisterRequest request) {
+        return ApiResponse.success(usersService.register(request));
 
     }
 
-
     @PostMapping("/refresh-token")
-    public ApiResponse<AccessTokenResponse> getAccessTokenByRefreshToken(@Valid @RequestBody RefreshTokenRequest request) {
-        return ApiResponse.success(usersService.getAccessTokenByRefreshToken(request));
+    public ApiResponse<TokenResponse> getAccessTokenByRefreshToken(
+            @CookieValue(name = "refreshToken", required = false)
+            @NotBlank(message = "Refresh token cookie không tìm thấy hoặc rỗng")
+            String refreshToken) {
+        return ApiResponse.success(usersService.getAccessTokenByRefreshToken(refreshToken));
     }
 
     @PostMapping("/logout")
-    public ApiResponse<ResponseEntity<?>> logout(@RequestHeader("Authorization") String authorization) {
-        return ApiResponse.success(ResponseEntity.ok(usersService.logout(authorization)));
+    public ApiResponse<String> logout(@RequestHeader("Authorization") String authorization, HttpServletResponse response) {
+
+        ResponseCookie cleanCookie = usersService.logout(authorization);
+        response.addHeader(HttpHeaders.SET_COOKIE, cleanCookie.toString());
+        return ApiResponse.success("Logout sucessfully");
     }
-
-
-
-
 
 
 }
