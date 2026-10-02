@@ -3,10 +3,7 @@ package com.springmatter.relearnspringboot.controller.rest;
 
 import com.springmatter.relearnspringboot.common.ApiResponse;
 import com.springmatter.relearnspringboot.common.BaseController;
-import com.springmatter.relearnspringboot.dto.record.AccessTokenResponse;
-import com.springmatter.relearnspringboot.dto.record.LoginRequest;
-import com.springmatter.relearnspringboot.dto.record.RegisterRequest;
-import com.springmatter.relearnspringboot.dto.record.TokenResponse;
+import com.springmatter.relearnspringboot.dto.record.*;
 import com.springmatter.relearnspringboot.service.UsersService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -48,8 +45,11 @@ public class AuthController extends BaseController {
     public ApiResponse<TokenResponse> getAccessTokenByRefreshToken(
             @CookieValue(name = "refreshToken", required = false)
             @NotBlank(message = "Refresh token cookie không tìm thấy hoặc rỗng")
-            String refreshToken) {
-        return ApiResponse.success(usersService.getAccessTokenByRefreshToken(refreshToken));
+            String refreshToken,
+            HttpServletResponse response) {
+        AccessTokenResponse accessTokenResponse = usersService.getAccessTokenByRefreshToken(refreshToken);
+        response.addHeader(HttpHeaders.SET_COOKIE, accessTokenResponse.refreshToken());
+        return ApiResponse.success(new TokenResponse(accessTokenResponse.accessToken()));
     }
 
     @PostMapping("/logout")

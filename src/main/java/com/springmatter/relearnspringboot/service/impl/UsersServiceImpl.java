@@ -1,14 +1,14 @@
 package com.springmatter.relearnspringboot.service.impl;
 
-import com.springmatter.relearnspringboot.dto.record.*;
+import com.springmatter.relearnspringboot.dto.record.AccessTokenResponse;
+import com.springmatter.relearnspringboot.dto.record.LoginRequest;
+import com.springmatter.relearnspringboot.dto.record.RegisterRequest;
 import com.springmatter.relearnspringboot.entity.auth.RefreshToken;
 import com.springmatter.relearnspringboot.entity.auth.Users;
-import com.springmatter.relearnspringboot.repository.auth.RefreshTokenRepository;
 import com.springmatter.relearnspringboot.repository.auth.UserRepository;
 import com.springmatter.relearnspringboot.security.jwt.JwtService;
 import com.springmatter.relearnspringboot.service.RefreshTokenService;
 import com.springmatter.relearnspringboot.service.UsersService;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
@@ -39,8 +39,6 @@ public class UsersServiceImpl implements UsersService {
 
     private final RefreshTokenService refreshTokenService;
 
-    private final RefreshTokenRepository refreshTokenRepository;
-
 
     @Value("${jwt.refresh-expiration}")
     private Long refreshTokenExpireTime;
@@ -58,15 +56,10 @@ public class UsersServiceImpl implements UsersService {
         );
         Users user = (Users) authentication.getPrincipal();
         String accessToken = jwtService.generateToken(Objects.requireNonNull(user));
-        String refreshToken = refreshTokenService.createRefreshToken(user.getId());
-        ResponseCookie responseCookie = ResponseCookie.from("refreshToken", refreshToken)
-                .httpOnly(true)                      // Chống JavaScript đọc (chống XSS)
-                .secure(false)                        // Chỉ gửi qua HTTPS ở local test chua có https
-                .path("/api/v1/auth/refresh-token")  // Giới hạn cookie chỉ gửi lên endpoint refresh
-                .maxAge(refreshTokenExpireTime)            // Thời gian sống 7 ngày
-                .sameSite("Strict")                  // Chống CSRF
-                .build();
-        return new AccessTokenResponse(accessToken, responseCookie, refreshToken);
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
+        ResponseCookie responseCookie = buildRefreshTokenCookie(refreshToken.getToken(), refreshTokenExpireTime);
+
+        return new AccessTokenResponse(accessToken, responseCookie, refreshToken.getToken());
     }
 
 
@@ -86,19 +79,18 @@ public class UsersServiceImpl implements UsersService {
         return Map.of("Register Account status", "ok");
     }
 
+    @Transactional
     @Override
-    public TokenResponse getAccessTokenByRefreshToken(String refreshTokenRequest) {
+    public AccessTokenResponse getAccessTokenByRefreshToken(String oldRefreshToken) {
+        // 1. Xoay vòng Refresh Token (hủy token cũ, sinh token mới trong cùng family)
+        RefreshToken newRefreshToken = refreshTokenService.rotateRefreshToken(oldRefreshToken);
+        Users user = userRepository.findById(newRefreshToken.getUserId()).orElseThrow(
+                () -> new RuntimeException("User not found"));
 
-        RefreshToken refreshToken = refreshTokenRepository.findByToken(refreshTokenRequest)
-                .orElseThrow(() -> new RuntimeException("refresh token not found"));
-        if (refreshToken.isRevoked()) {
-            throw new IllegalArgumentException("refresh token is revoked");
-        }
-        refreshTokenService.verifyRefreshToken(refreshToken);
-        Users user = userRepository.findById(refreshToken.getUserId())
-                .orElseThrow(() -> new RuntimeException("user not found"));
         String newAccessToken = jwtService.generateToken(user);
-        return new TokenResponse(newAccessToken);
+
+        ResponseCookie newCookie = buildRefreshTokenCookie(newRefreshToken.getToken(), refreshTokenExpireTime);
+        return new AccessTokenResponse(newAccessToken, newCookie, newRefreshToken.getToken());
     }
 
     @Override
@@ -107,15 +99,21 @@ public class UsersServiceImpl implements UsersService {
         // xoa refresh token trong db
         String jwt = authorization.substring(7);
         String username = jwtService.extractUserName(jwt);
-        Users user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("user not found"));
+        Users user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("user not found"));
         refreshTokenService.revokeAllUserToken(user.getId());
         // 3. Tạo cookie rác (maxAge = 0) để yêu cầu client xóa cookie
-        return  ResponseCookie.from("refreshToken", "")
-                .httpOnly(true)
+        return buildRefreshTokenCookie("", 0L);
+    }
+
+    public ResponseCookie buildRefreshTokenCookie(String refreshToken, Long maxAgeSeconds) {
+
+        return ResponseCookie.from("refreshToken", refreshToken)
+                .httpOnly(true)                      // Chống JavaScript đọc (chống XSS)
                 .secure(false)                        // Chỉ gửi qua HTTPS ở local test chua có https
-                .path("/api/v1/auth/refresh-token")
-                .maxAge(0) // Đặt về 0 để xóa cookie ngay lập tức
-                .sameSite("Strict")
+                .path("/api/v1/auth/refresh-token")  // Giới hạn cookie chỉ gửi lên endpoint refresh
+                .maxAge(maxAgeSeconds)            // Thời gian sống 7 ngày
+                .sameSite("Strict")                  // Chống CSRF
                 .build();
     }
 

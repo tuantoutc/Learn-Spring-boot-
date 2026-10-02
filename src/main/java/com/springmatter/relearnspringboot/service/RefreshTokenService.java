@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 @Service
 public interface RefreshTokenService {
 
-    String createRefreshToken(Long userId);
+    RefreshToken createRefreshToken(Long userId);
+
+    RefreshToken rotateRefreshToken(String tokenString);
 
     void verifyRefreshToken(RefreshToken refreshToken);
 
