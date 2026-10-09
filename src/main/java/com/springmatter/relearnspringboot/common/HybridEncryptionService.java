@@ -11,6 +11,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.FileReader;
+import java.nio.ByteBuffer;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -21,6 +22,11 @@ import java.util.Base64;
 
 @Service
 public class HybridEncryptionService {
+
+    // 2048-bit RSA key cho ra ciphertext 256 bytes
+    private static final int RSA_KEY_SIZE = 256;
+    private static final int GCM_IV_SIZE = 12;
+
     private final PrivateKey privateKey;
     private final PublicKey publicKey;
 
@@ -91,6 +97,68 @@ public class HybridEncryptionService {
         Cipher aesCipher = Cipher.getInstance("AES/GCM/NoPadding");
         GCMParameterSpec gcmSpec = new GCMParameterSpec(128, iv);
         aesCipher.init(Cipher.DECRYPT_MODE, aesKey, gcmSpec);
+        return aesCipher.doFinal(encryptedPayload);
+    }
+
+    // Mã hóa trả về byte[] nhị phân nguyên bản
+    public byte[] encryptToBinary(byte[] plaintext) throws Exception {
+        // 1. Sinh khóa AES ngẫu nhiên
+        KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+        keyGen.init(256);
+        SecretKey aesKey = keyGen.generateKey();
+
+        // 2. Sinh IV 12 bytes
+        byte[] iv = new byte[GCM_IV_SIZE];
+        new SecureRandom().nextBytes(iv);
+
+        // 3. Mã hóa dữ liệu bằng AES-GCM
+        Cipher aesCipher = Cipher.getInstance("AES/GCM/NoPadding");
+        aesCipher.init(Cipher.ENCRYPT_MODE, aesKey, new GCMParameterSpec(128, iv));
+        byte[] encryptedPayload = aesCipher.doFinal(plaintext);
+
+        // 4. Mã hóa AES key bằng RSA PublicKey
+        Cipher rsaCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+        rsaCipher.init(Cipher.ENCRYPT_MODE, publicKey);
+        byte[] encryptedKey = rsaCipher.doFinal(aesKey.getEncoded());
+
+        // 5. Gom thành 1 mảng byte duy nhất (Header 268 bytes + Ciphertext)
+        ByteBuffer buffer = ByteBuffer.allocate(encryptedKey.length + iv.length + encryptedPayload.length);
+        buffer.put(encryptedKey);
+        buffer.put(iv);
+        buffer.put(encryptedPayload);
+
+        return buffer.array();
+    }
+
+    // Giải mã từ byte[] nhị phân
+    public byte[] decryptFromBinary(byte[] binaryData) throws Exception {
+        if (binaryData.length < RSA_KEY_SIZE + GCM_IV_SIZE) {
+            throw new IllegalArgumentException("Dữ liệu file mã hóa không hợp lệ (kích thước quá nhỏ)");
+        }
+
+        ByteBuffer buffer = ByteBuffer.wrap(binaryData);
+
+        // Đọc 256 bytes Encrypted Key
+        byte[] encryptedKey = new byte[RSA_KEY_SIZE];
+        buffer.get(encryptedKey);
+
+        // Đọc 12 bytes IV
+        byte[] iv = new byte[GCM_IV_SIZE];
+        buffer.get(iv);
+
+        // Phần còn lại là Ciphertext
+        byte[] encryptedPayload = new byte[buffer.remaining()];
+        buffer.get(encryptedPayload);
+
+        // Giải mã AES Key bằng RSA PrivateKey
+        Cipher rsaCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+        rsaCipher.init(Cipher.DECRYPT_MODE, privateKey);
+        byte[] aesKeyBytes = rsaCipher.doFinal(encryptedKey);
+        SecretKey aesKey = new SecretKeySpec(aesKeyBytes, "AES");
+
+        // Giải mã nội dung file bằng AES-GCM
+        Cipher aesCipher = Cipher.getInstance("AES/GCM/NoPadding");
+        aesCipher.init(Cipher.DECRYPT_MODE, aesKey, new GCMParameterSpec(128, iv));
         return aesCipher.doFinal(encryptedPayload);
     }
 }
