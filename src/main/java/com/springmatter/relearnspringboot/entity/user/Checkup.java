@@ -1,7 +1,6 @@
-package com.springmatter.relearnspringboot.dto.record.request;
+package com.springmatter.relearnspringboot.entity.user;
 
 
-import com.springmatter.relearnspringboot.entity.user.Patient;
 import jakarta.persistence.*;
 import lombok.*;
 

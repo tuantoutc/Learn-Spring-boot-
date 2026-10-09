@@ -1,10 +1,7 @@
 package com.springmatter.relearnspringboot.configuration;
 
 
-import com.springmatter.relearnspringboot.repository.CategoryRepository;
-import com.springmatter.relearnspringboot.repository.PatientRepository;
-import com.springmatter.relearnspringboot.repository.ProductRepository;
-import com.springmatter.relearnspringboot.repository.UsersRepository;
+import com.springmatter.relearnspringboot.repository.*;
 import com.springmatter.relearnspringboot.repository.auth.RefreshTokenRepository;
 import com.springmatter.relearnspringboot.repository.auth.UserRepository;
 import jakarta.persistence.EntityManagerFactory;
@@ -31,7 +28,8 @@ import javax.sql.DataSource;
                 classes = {UsersRepository.class,
                         PatientRepository.class,
                         UserRepository.class,
-                        RefreshTokenRepository.class
+                        RefreshTokenRepository.class,
+                        DocumentRepository.class
                 }
         ),
         excludeFilters = @ComponentScan.Filter(
@@ -73,7 +71,8 @@ public class UserDatabaseConfig {
     ) {
         return builder
                 .dataSource(dataSource)
-                .packages("com.springmatter.relearnspringboot.entity.user", "com.springmatter.relearnspringboot.entity.auth")
+                .packages("com.springmatter.relearnspringboot.entity.user",
+                        "com.springmatter.relearnspringboot.entity.auth")
                 .persistenceUnit("user")
                 .build();
     }

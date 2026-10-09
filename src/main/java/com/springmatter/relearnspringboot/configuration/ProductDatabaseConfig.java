@@ -31,7 +31,8 @@ import javax.sql.DataSource;
         ),
         excludeFilters = @ComponentScan.Filter(
                 type = org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE,
-                classes = {UsersRepository.class, com.springmatter.relearnspringboot.repository.PatientRepository.class}
+                classes = {UsersRepository.class,
+                        com.springmatter.relearnspringboot.repository.PatientRepository.class}
         ),
         entityManagerFactoryRef = "productEntityManagerFactory",
         transactionManagerRef = "productTransactionManager"
